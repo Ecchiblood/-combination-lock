@@ -1,0 +1,129 @@
+#include <mega328.h>
+#include <io.h>
+#include <delay.h>
+#include <MyLCD.h>
+#include <stdio.h>
+
+void main(){
+
+char temp[20];
+struct time {char m; char s;}rt;
+DDRB=0b00001000;
+DDRD=0xFF;
+DDRC=0b00000110;
+PORTB=0b00000111;
+
+LCDinit();
+LCDon();
+while(1){
+while(1){
+if(PINB.0==0){
+LCDclr();
+LCDgoto(1,0);
+ LCDputs("Select mode.");
+delay_ms(5000);
+ LCDclr();
+ LCDgoto(0,0);
+ LCDputs("1: COTTON");
+ LCDgoto(0,1);
+ LCDputs("2: WOOL");
+ }
+  if(PINB.1==0){
+  LCDclr();
+  LCDgoto(0,0);
+   LCDputs("Selected mode:");
+   LCDgoto(0,1);
+   LCDputs("COTTON");
+   delay_ms(1000);
+   LCDclr();
+   LCDgoto(0,0);
+   LCDputs("Begining in ");
+   LCDgoto(0,1);
+   LCDputs("3... ");
+   delay_ms(1000);
+   LCDputs("2... ");
+   delay_ms(1000);
+   LCDputs("1... ");
+   delay_ms(1000);
+   
+   rt.m=1;
+   rt.s=0;
+   LCDclr();
+   LCDgoto(5,0);
+   LCDputs("COTTON");
+   LCDgoto(0,1);
+   while(rt.s>=0){
+   if(rt.s==0){
+    LCDputs("Water take");
+    }
+    if(rt.s==56){
+     LCDgoto(0,1);
+      LCDputs("Washing   ");
+      PORTC=1<<1;
+      }
+      if(rt.s==54)PORTC=1<<2;
+      if(rt.s==52)PORTC=1<<1;
+      if(rt.s==50)PORTC=1<<2;
+      if(rt.s==48)PORTC=1<<1;
+      if(rt.s==46)PORTC=1<<2;
+      if(rt.s==44)PORTC=1<<1;
+      if(rt.s==43)PORTC=1<<2;
+      if(rt.s==41)PORTC=1<<1;
+      if(rt.s==40){
+      PORTC=0;
+      LCDgoto(0,1);
+      LCDputs("Drop water");
+      }
+      if(rt.s==36){
+      LCDgoto(0,1);
+      LCDputs("Drying    ");
+       PORTC=1<<2;
+      }
+      if(rt.s==31){
+       PORTC=1<<1;
+      }
+      if(rt.s==28){
+       PORTC=0;
+       LCDgoto(0,1);
+       LCDputs("Water take");
+      }
+      if(rt.s==24){
+      LCDgoto(0,1);
+       LCDputs("Rinse     ");
+      PORTC=1<<1;
+      }
+      if(rt.s==22)PORTC=1<<2;
+      if(rt.s==20)PORTC=1<<1;
+      if(rt.s==18)PORTC=1<<2;
+      if(rt.s==16)PORTC=1<<1;
+      if(rt.s==15)PORTC=1<<2;
+        if(rt.s==14){
+      PORTC=0;
+      LCDgoto(0,1);
+      LCDputs("Drop water");
+      }
+      if(rt.s==10){
+      LCDgoto(0,1);
+      LCDputs("Drying     ");
+       PORTC=1<<1;
+      }
+      if(rt.s==4){
+       PORTC=0;
+       LCDgoto(0,1);
+      LCDputs("End   ");
+      }
+      if(rt.s==1){ 
+      LCDclr();
+      break;
+      }
+   if(--rt.m<=0) rt.s=60; rt.m=0;
+   if(--rt.s<=0) rt.s=0;
+   sprintf(temp, "%02d:%02d", rt.m, rt.s);
+    LCDgoto(11,1);
+    LCDputs(temp);
+    delay_ms(1000);
+      }
+      }
+      }
+      }
+      }
